@@ -2,6 +2,9 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
+import { singinInput, singupInput } from "@jaitesh/medium-common";
+
+
 
 export const userRouter = new Hono<{
     Bindings: {
@@ -11,11 +14,18 @@ export const userRouter = new Hono<{
 }>();
 
 userRouter.post('/signup', async (c) => {
+    const body = await c.req.json();
+    const {success} = singupInput.safeParse(body);
+    if(!success) {
+      c.status(400);
+      return c.json({ error: "Invalid input" });
+    }
+
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
   
-    const body = await c.req.json();
+    
   
     const user = await prisma.user.create({
       data: {
@@ -32,16 +42,23 @@ userRouter.post('/signup', async (c) => {
 })
   
 userRouter.post('/signin', async (c) => {
-    const prisma = new PrismaClient({
+  const body = await c.req.json();
+  const { success } = singinInput.safeParse(body);
+	if (!success) {
+		c.status(400);
+		return c.json({ error: "invalid input" })
+  };  
+  
+  const prisma = new PrismaClient({
     //@ts-ignore
         datasourceUrl: c.env?.DATABASE_URL	,
     }).$extends(withAccelerate());
 
-    const body = await c.req.json();
+  
     const user = await prisma.user.findUnique({
         where: {
             email: body.email,
-    password: body.password
+            password: body.password
         }
     });
 
