@@ -12,7 +12,7 @@ export const blogRouter = new Hono<{
         JWT_SECRET: string;
     }, 
     Variables: {
-        userId : string ;
+        userId : number ;
     }
 }>(); 
 
@@ -95,9 +95,22 @@ blogRouter.get('/bulk' , async(c) => {
 		datasourceUrl: c.env?.DATABASE_URL	,
 	}).$extends(withAccelerate());
 	
-	const posts = await prisma.post.findMany({});
+	const blogs = await prisma.post.findMany({
+		select : {
+			content : true,
+			title : true,
+			id : true,
+            author: {
+				select: {
+					name: true
+				}
+			}
+		}
+	});
 
-	return c.json(posts);
+	return c.json({
+		blogs
+	});
 })
 blogRouter.get('/get/:id', async(c) => {
     const id = c.req.param('id');
@@ -107,7 +120,7 @@ blogRouter.get('/get/:id', async(c) => {
 	
 	const post = await prisma.post.findUnique({
 		where: {
-			id
+			id : Number(id),
 		}
 	});
 

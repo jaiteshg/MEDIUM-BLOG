@@ -31,14 +31,12 @@ userRouter.post('/signup', async (c) => {
       data: {
         email: body.username,
         password: body.password,
+        name : body.name
       },
     });
-    console.log(user)
     const token = await sign({ id: user.id }, c.env.JWT_SECRET)
   
-    return c.json({
-      token
-    })
+    return c.text(token)
 })
   
 userRouter.post('/signin', async (c) => {
@@ -68,5 +66,5 @@ userRouter.post('/signin', async (c) => {
     }
 
     const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
-    return c.json({ jwt });
+    return c.text( jwt );
 })
