@@ -19,7 +19,7 @@ return <Link to={`/blog/${id}`}>
     <div className="p-4 border-b border-slate-200 pb-4 w-screen max-w-screen-md cursor-pointer">
           <div className="flex">
         <div className="flex justify-center flex-col">
-        <Avtar name= {authorName}/>
+        <Avatar name= {authorName}/>
         </div>
         <div className="font-extralight pl-2">{authorName}</div>
         <div className="pl-2 flex justify-center flex-col">
@@ -45,7 +45,7 @@ return <Link to={`/blog/${id}`}>
 function Circle(){
     return<div className="h-1 w-1 rounded-full bg-slate-500" ></div>
 }
-export function Avtar( {name} : {name: string}){
+export function Avatar( {name} : {name: string}){
     return <>      
     <div className="relative inline-flex items-center justify-center w-6 h-6 overflow-hidden bg-gray-300 rounded-full dark:bg-gray-600">
         <span className="font-medium text-base text-gray-600 dark:text-gray-300">{name[0]}</span>
