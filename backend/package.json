@@ -2,7 +2,8 @@
   "name": "backend",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@jaitesh/medium-common": "^1.0.1",
